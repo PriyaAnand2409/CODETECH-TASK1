@@ -1,0 +1,41 @@
+
+const apiKey ="e2b9a9110fdaed35e54d58d04699fb20";
+const apiUrl=  "https://api.openweathermap.org/data/2.5/weather?q=";
+ 
+const searchBox = document.querySelector(".search input");
+const searchBtn= document.querySelector(".search button")
+const weatherIcon= document.querySelector(".weather-icon");
+async function checkWeather(city="Delhi"){
+    const response = await fetch( `${apiUrl}${city}&appid=${apiKey}&units=metric`);
+     if(response.status==404){
+        document.querySelector(".error").style.display="block";
+        document.querySelector(".weather").style.display="none";
+     }else{
+        let  data = await response.json();
+        
+
+        document.querySelector(".city").innerHTML=data.name;
+        document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+"°C";
+        document.querySelector(".humidity").innerHTML=data.main.humidity+"%"; 
+        document.querySelector(".wind").innwerHTML=data.wind.speed+"km/h";  
+         if(data.weather[0].main=="Clouds"){
+            weatherIcon.src="icon/clouds.png";
+    }else if(data.weather[0].main=="Rain"){
+        weatherIcon.src="icon/rain.png";
+    }else if(data.weather[0].main=="Drizzle"){
+        weatherIcon.src="icon/drizzle.png";
+    }else if(data.weather[0].main=="Mist"){
+        weatherIcon.src="icon/mist.png";    
+    }
+    document.querySelector(".weather").style="display:block";
+    document.querySelector(".error").style="display:none";
+    }
+         
+     }
+    checkWeather();
+   
+searchBtn.addEventListener("click", () => {
+    checkWeather(searchBox.value);
+});
+
+ 
